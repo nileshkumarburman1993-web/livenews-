@@ -2252,16 +2252,11 @@ class IndiaTribuneApp {
     // ═══ TICKER ═══
     async loadTicker() {
         const items = [
-            'Sensex crosses 85,000 — new all-time high; Nifty at 26,000',
+            'Sensex plunged 869.96 points, Nifty declined 251.6 points to 25,567.75; Infosys and Tata Consultancy Services were the only gainers',
             'A curling scandal rocks Olympic ice - NPR',
-            'Delhi air quality improves to "satisfactory" level for first time in November',
+            'Current Delhi Air Quality Index (AQI) is 179 Unhealthy level with real-time air pollution PM2.5 (99µg/m³), PM10 (119µg/m³), Temperature (24.1°C) in',
             'PM inaugurates India AI Impact Summit 2026',
-            'India wins Test series against Australia 3-1 — Border-Gavaskar Trophy retained',
-            'UPI transactions cross 20 billion monthly — digital payment revolution continues',
-            'Supreme Court landmark verdict strengthens Right to Privacy for digital citizens',
-            'Indian startup ecosystem adds 15 new unicorns in 2025 — total reaches 125',
-            'Vande Bharat Express network expands to 100 cities — Delhi-Mumbai in 5 hours',
-            'Jal Jeevan Mission complete — every rural household now has tap water connection'
+           
         ];
         const el = document.getElementById('tickerContent');
         el.innerHTML = [...items, ...items].map(i => `<span class="ticker-item">${i}</span>`).join('');
