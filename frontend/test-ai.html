@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Enhanced News Demo - Drive News India</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="css/ai-enhancements.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .header h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 36px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 18px;
+        }
+        
+        .ai-badge-demo {
+            display: inline-block;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .news-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .news-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.3);
+        }
+        
+        .card-image {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .news-card-content {
+            padding: 20px;
+        }
+        
+        .news-card-content h3 {
+            color: #333;
+            margin-bottom: 12px;
+            font-size: 18px;
+            line-height: 1.4;
+        }
+        
+        .description {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: #999;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 60px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .loading h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .stats-banner {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        
+        .stats-banner h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .stat-card {
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 AI-Enhanced News Analysis</h1>
+            <p>Drive News India - Powered by Advanced AI Processing</p>
+            <span class="ai-badge-demo">✨ Real-time Analysis Active</span>
+        </div>
+        
+        <div id="statsSection" style="display: none;">
+            <div class="stats-banner">
+                <h2>📊 AI Analysis Summary</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalArticles">0</div>
+                        <div class="stat-label">Articles Analyzed</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="positiveCount">0</div>
+                        <div class="stat-label">Positive Sentiment</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="negativeCount">0</div>
+                        <div class="stat-label">Negative Sentiment</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="highImpact">0</div>
+                        <div class="stat-label">High Impact News</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="trendingTopics"></div>
+        
+        <div id="loadingSection" class="loading">
+            <h2>🚀 Loading AI-Enhanced News...</h2>
+            <div class="spinner"></div>
+            <p style="margin-top: 20px; color: #666;">Fetching and analyzing latest news articles</p>
+        </div>
+        
+        <div class="news-grid ai-news-display" id="newsGrid"></div>
+    </div>
+    
+    <script src="js/ai-news-display.js"></script>
+    <script>
+        const aiDisplay = window.aiNewsDisplay;
+        
+        async function loadNews() {
+            try {
+                const response = await fetch('/api/news/general');
+                const data = await response.json();
+                
+                if (data.success && data.articles) {
+                    document.getElementById('loadingSection').style.display = 'none';
+                    document.getElementById('statsSection').style.display = 'block';
+                    
+                    // Calculate stats
+                    let positive = 0, negative = 0, highImpact = 0;
+                    
+                    data.articles.forEach(article => {
+                        if (article.sentiment?.type === 'positive') positive++;
+                        if (article.sentiment?.type === 'negative') negative++;
+                        if (article.impact?.level === 'high') highImpact++;
+                    });
+                    
+                    document.getElementById('totalArticles').textContent = data.articles.length;
+                    document.getElementById('positiveCount').textContent = positive;
+                    document.getElementById('negativeCount').textContent = negative;
+                    document.getElementById('highImpact').textContent = highImpact;
+                    
+                    // Display trending topics
+                    if (data.trendingTopics) {
+                        aiDisplay.displayTrendingTopics(data.trendingTopics);
+                    }
+                    
+                    // Store articles in AI display
+                    aiDisplay.currentArticles = data.articles;
+                    
+                    // Render news cards
+                    const newsGrid = document.getElementById('newsGrid');
+                    newsGrid.innerHTML = '';
+                    
+                    data.articles.slice(0, 12).forEach((article, index) => {
+                        const card = aiDisplay.renderEnhancedNewsCard(article, index);
+                        newsGrid.appendChild(card);
+                    });
+                    
+                    console.log('✅ AI-enhanced news loaded successfully!');
+                    console.log('Sample article with AI data:', data.articles[0]);
+                }
+            } catch (error) {
+                console.error('Error loading news:', error);
+                document.getElementById('loadingSection').innerHTML = `
+                    <h2 style="color: #e74c3c;">❌ Error Loading News</h2>
+                    <p style="color: #666;">${error.message}</p>
+                    <button onclick="location.reload()" style="margin-top: 20px; padding: 12px 24px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">
+                        Retry
+                    </button>
+                `;
+            }
+        }
+        
+        // Load news on page load
+        loadNews();
+    </script>
+</body>
+</html>

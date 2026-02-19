@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Analysis Demo - Drive News India</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.2em;
+        }
+
+        .demo-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .demo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .card-badges {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .source-badge {
+            background: #3498db;
+            color: white;
+        }
+
+        .location-badge {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .ai-badge {
+            background: #2ecc71;
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .card-title {
+            font-size: 1.4em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .card-desc {
+            color: #7f8c8d;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .quick-stats {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .info-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+
+        .info-box h3 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        .checklist {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        .checklist h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .checklist-item {
+            padding: 12px;
+            margin: 8px 0;
+            background: #f8f9fa;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checklist-item::before {
+            content: '✅';
+            font-size: 1.2em;
+        }
+
+        .section-preview {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .section-preview h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .section-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .section-item h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-item .example {
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-family: monospace;
+            color: #555;
+        }
+
+        .emoji-large {
+            font-size: 2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 AI Analysis Demo</h1>
+            <p>AI Button Par Click Karne Par Kya Dikhega - Complete Preview</p>
+        </div>
+
+        <div class="info-box">
+            <h3>📍 Kaise Use Karein?</h3>
+            <p><strong>Step 1:</strong> Neeche diye gaye demo cards mein se kisi par bhi click karein</p>
+            <p><strong>Step 2:</strong> Ek modal window khulega jisme complete AI analysis dikhega</p>
+            <p><strong>Step 3:</strong> Scroll karke saare sections dekh sakte hain</p>
+            <p><strong>Note:</strong> Yeh exactly wahi view hai jo actual news platform par dikhega!</p>
+        </div>
+
+        <!-- Demo Card 1 -->
+        <div class="demo-card" onclick="showAIAnalysis('weather')">
+            <div class="card-badges">
+                <span class="badge source-badge">Delhi Samachar</span>
+                <span class="badge location-badge">📍 Delhi</span>
+                <span class="badge ai-badge">🤖 AI</span>
+            </div>
+            <div class="card-title">
+                दिल्ली में भीषण गर्मी का कहर - तापमान 45°C पार, लू का अलर्ट जारी
+            </div>
+            <div class="card-desc">
+                दिल्ली-NCR में गर्मी का प्रकोप जारी है। मौसम विभाग ने लू का ऑरेंज अलर्ट जारी किया है। 
+                लोगों से घर से बाहर न निकलने की अपील की गई है।
+            </div>
+            <div class="quick-stats">
+                <div class="stat">😟 Negative (82%)</div>
+                <div class="stat">✅ Credibility: 88/100</div>
+                <div class="stat">⚡ High Impact</div>
+                <div class="stat">🎭 Low Bias</div>
+            </div>
+            <a href="#" class="cta-button" onclick="event.preventDefault();">
+                👆 Click karke AI Analysis dekhein
+            </a>
+        </div>
+
+        <!-- Demo Card 2 -->
+        <div class="demo-card" onclick="showAIAnalysis('metro')">
+            <div class="card-badges">
+                <span class="badge source-badge">Metro News</span>
+                <span class="badge location-badge">📍 Delhi</span>
+                <span class="badge ai-badge">🤖 AI</span>
+            </div>
+            <div class="card-title">
+                Delhi Metro में नई लाइन का उद्घाटन - 10 नए स्टेशन शुरू
+            </div>
+            <div class="card-desc">
+                दिल्ली मेट्रो के विस्तार के तहत नई लाइन का उद्घाटन किया गया। 
+                इससे हजारों यात्रियों को फायदा होगा।
+            </div>
+            <div class="quick-stats">
+                <div class="stat">😊 Positive (75%)</div>
+                <div class="stat">✅ Credibility: 92/100</div>
+                <div class="stat">⚡ Medium Impact</div>
+                <div class="stat">🎭 No Bias</div>
+            </div>
+            <a href="#" class="cta-button" onclick="event.preventDefault();">
+                👆 Click karke AI Analysis dekhein
+            </a>
+        </div>
+
+        <!-- Demo Card 3 -->
+        <div class="demo-card" onclick="showAIAnalysis('crime')">
+            <div class="card-badges">
+                <span class="badge source-badge">Crime Reporter</span>
+                <span class="badge location-badge">📍 Delhi</span>
+                <span class="badge ai-badge">🤖 AI</span>
+            </div>
+            <div class="card-title">
+                दिल्ली पुलिस ने बड़ी कार्रवाई - गैंग का पर्दाफाश, 5 गिरफ्तार
+            </div>
+            <div class="card-desc">
+                दिल्ली पुलिस की क्राइम ब्रांच ने एक बड़े अपराधिक गैंग का भंडाफोड़ किया है। 
+                5 आरोपियों को गिरफ्तार किया गया है।
+            </div>
+            <div class="quick-stats">
+                <div class="stat">😐 Neutral (68%)</div>
+                <div class="stat">✅ Credibility: 85/100</div>
+                <div class="stat">⚡ High Impact</div>
+                <div class="stat">🎭 Low Bias</div>
+            </div>
+            <a href="#" class="cta-button" onclick="event.preventDefault();">
+                👆 Click karke AI Analysis dekhein
+            </a>
+        </div>
+
+        <!-- What to Expect Section -->
+        <div class="section-preview">
+            <h2>📋 AI Modal Mein Ye Sab Sections Dikhenge:</h2>
+
+            <div class="section-item">
+                <h3><span class="emoji-large">🤖</span> 1. AI-Generated Summary</h3>
+                <p>Teen level ka summary milega:</p>
+                <div class="example">
+                    📝 One-Line: "Delhi में temperature 45°C पार"<br>
+                    🤖 Standard: 2-3 sentence ka detailed summary<br>
+                    ✓ Key Points: 4-5 bullet points
+                </div>
+            </div>
+
+            <div class="section-item">
+                <h3><span class="emoji-large">😊</span> 2. Sentiment Analysis</h3>
+                <p>Article ki bhavna (emotion) kya hai:</p>
+                <div class="example">
+                    Emotion: 😟 Negative (चिंताजनक)<br>
+                    Confidence: 82%<br>
+                    Keywords: "भीषण", "कहर", "अलर्ट"
+                </div>
+            </div>
+
+            <div class="section-item">
+                <h3><span class="emoji-large">🎭</span> 3. Bias Detection</h3>
+                <p>Kya article biased hai ya neutral:</p>
+                <div class="example">
+                    Bias Level: ✅ Low<br>
+                    Political Leaning: Neutral<br>
+                    Balance Score: 88/100
+                </div>
+            </div>
+
+            <div class="section-item">
+                <h3><span class="emoji-large">📊</span> 4. Fact-Check Indicators</h3>
+                <p>Konse claims ko verify karna chahiye:</p>
+                <div class="example">
+                    Claims Found: 2<br>
+                    ✓ "तापमान 45°C" - Verifiable<br>
+                    ⚠️ "सभी स्कूल बंद" - Needs verification
+                </div>
+            </div>
+
+            <div class="section-item">
+                <h3><span class="emoji-large">📖</span> 5. Readability Score</h3>
+                <p>Article kitna easy hai padhne mein:</p>
+                <div class="example">
+                    Reading Level: Grade 7-8<br>
+                    Difficulty: Medium<br>
+                    Best For: General public ✅
+                </div>
+            </div>
+
+            <div class="section-item">
+                <h3><span class="emoji-large">✅</span> 6. Credibility Score</h3>
+                <p>Source kitna trustworthy hai (0-100):</p>
+                <div class="example">
+                    Overall Score: 88/100<br>
+                    Source Reputation: 92/100<br>
+                    Trust Level: HIGH ✅✅
+                </div>
+            </div>
+
+            <div class="section-item">
+                <h3><span class="emoji-large">⚡</span> 7. Impact Analysis</h3>
+                <p>Article ka social, economic, environmental impact:</p>
+                <div class="example">
+                    Social Impact: 95/100 🔥<br>
+                    Economic Impact: 65/100<br>
+                    Environmental: 70/100
+                </div>
+            </div>
+
+            <div class="section-item">
+                <h3><span class="emoji-large">👥</span> 8. Named Entities</h3>
+                <p>Important names, places, organizations:</p>
+                <div class="example">
+                    👤 People: मौसम विभाग प्रवक्ता<br>
+                    📍 Places: दिल्ली, नोएडा, गुड़गांव<br>
+                    🏢 Organizations: भारतीय मौसम विभाग
+                </div>
+            </div>
+
+            <div class="section-item">
+                <h3><span class="emoji-large">🔑</span> 9. Key Facts</h3>
+                <p>Important statistics, dates, quotes:</p>
+                <div class="example">
+                    📈 Stats: Current 45°C, Record 47.2°C<br>
+                    💬 Quotes: "दोपहर में बाहर न निकलें"<br>
+                    📅 Dates: Alert valid till tomorrow
+                </div>
+            </div>
+
+            <div class="section-item">
+                <h3><span class="emoji-large">📚</span> 10. Context & Background</h3>
+                <p>Historical context aur related information:</p>
+                <div class="example">
+                    Historical: पिछले 5 सालों में गर्मी बढ़ी<br>
+                    Related: Climate change, urban heat island<br>
+                    Expert Opinion: "Global warming का प्रभाव"
+                </div>
+            </div>
+
+            <div class="section-item">
+                <h3><span class="emoji-large">🔗</span> 11. Related Articles</h3>
+                <p>Similar news stories:</p>
+                <div class="example">
+                    1. "पानी की किल्लत" - 78% similar<br>
+                    2. "हीटस्ट्रोक के मामले बढ़े" - 65% similar<br>
+                    3. "स्कूल बंद" - 60% similar
+                </div>
+            </div>
+        </div>
+
+        <!-- Checklist -->
+        <div class="checklist">
+            <h2>✅ AI Modal Mein Ye Sab Check Karein:</h2>
+            <div class="checklist-item">Modal window smoothly open ho</div>
+            <div class="checklist-item">Article title clearly visible ho</div>
+            <div class="checklist-item">AI-Generated Summary (3 levels)</div>
+            <div class="checklist-item">Sentiment badge with percentage</div>
+            <div class="checklist-item">Bias analysis section</div>
+            <div class="checklist-item">Fact-check indicators</div>
+            <div class="checklist-item">Readability score</div>
+            <div class="checklist-item">Credibility score (0-100)</div>
+            <div class="checklist-item">Impact levels (social, economic, environmental)</div>
+            <div class="checklist-item">Named entities (people, places, orgs)</div>
+            <div class="checklist-item">Key facts & statistics</div>
+            <div class="checklist-item">Background context</div>
+            <div class="checklist-item">Related articles</div>
+            <div class="checklist-item">Audio button (🔊 सुनें) working</div>
+            <div class="checklist-item">Close button (X) functional</div>
+        </div>
+
+        <div class="info-box" style="margin-top: 30px; background: #d1ecf1; border-color: #0c5460;">
+            <h3>🚀 Ab Actual Platform Par Test Karein:</h3>
+            <p><strong>Main Platform:</strong> <a href="http://localhost:3000" target="_blank">http://localhost:3000</a></p>
+            <p><strong>AI Test Page:</strong> <a href="http://localhost:3000/test-ai.html" target="_blank">http://localhost:3000/test-ai.html</a></p>
+            <p><strong>Dashboard:</strong> <a href="http://localhost:3000/dashboard.html" target="_blank">http://localhost:3000/dashboard.html</a></p>
+        </div>
+    </div>
+
+    <script>
+        function showAIAnalysis(type) {
+            const data = {
+                weather: {
+                    title: "दिल्ली में भीषण गर्मी का कहर - तापमान 45°C पार, लू का अलर्ट जारी",
+                    source: "Delhi Samachar",
+                    sentiment: "😟 Negative (82%)",
+                    credibility: "88/100",
+                    bias: "Low",
+                    impact: "High"
+                },
+                metro: {
+                    title: "Delhi Metro में नई लाइन का उद्घाटन - 10 नए स्टेशन शुरू",
+                    source: "Metro News",
+                    sentiment: "😊 Positive (75%)",
+                    credibility: "92/100",
+                    bias: "None",
+                    impact: "Medium"
+                },
+                crime: {
+                    title: "दिल्ली पुलिस ने बड़ी कार्रवाई - गैंग का पर्दाफाश, 5 गिरफ्तार",
+                    source: "Crime Reporter",
+                    sentiment: "😐 Neutral (68%)",
+                    credibility: "85/100",
+                    bias: "Low",
+                    impact: "High"
+                }
+            };
+
+            const article = data[type];
+            
+            alert(`
+🤖 AI ANALYSIS PREVIEW 🤖
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📰 ${article.title}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📊 QUICK STATS:
+
+😊 Sentiment: ${article.sentiment}
+✅ Credibility: ${article.credibility}
+🎭 Bias: ${article.bias}
+⚡ Impact: ${article.impact}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💡 FULL ANALYSIS INCLUDES:
+
+✅ AI-Generated Summary (3 levels)
+✅ Sentiment Analysis with confidence
+✅ Bias Detection
+✅ Fact-Check Indicators
+✅ Readability Score
+✅ Credibility Score (0-100)
+✅ Impact Analysis
+✅ Named Entities
+✅ Key Facts & Statistics
+✅ Context & Background
+✅ Related Articles
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 Actual platform par ye sab modal 
+   window mein beautifully formatted
+   dikhega!
+
+👉 Visit: http://localhost:3000
+            `);
+        }
+    </script>
+</body>
+</html>
