@@ -179,9 +179,16 @@ app.get('/api/news/:category', async (req, res) => {
             console.log('⚠️ NewsAPI also failed:', newsApiError.message);
         }
         
-        // Final fallback: FREE RSS feeds (NO API KEY NEEDED!)
+        // ═══════════════════════════════════════════════════════
+        // AUTOMATIC FALLBACK: FREE RSS FEEDS
+        // Triggered when all API sources fail
+        // NO API KEY NEEDED - Works forever - Unlimited requests
+        // ═══════════════════════════════════════════════════════
         try {
-            console.log('🆓 Using FREE RSS feeds as fallback...');
+            console.log('');
+            console.log('🔄🔄🔄 AUTOMATIC FALLBACK ACTIVATED! 🔄🔄🔄');
+            console.log('🆓 Switching to FREE Google News RSS feeds...');
+            console.log('✅ No API limits • ✅ FREE forever • ✅ AI processing still active');
             const rssFeeds = {
                 general: 'https://news.google.com/rss?hl=en-IN&gl=IN&ceid=IN:en',
                 business: 'https://news.google.com/rss/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRGx6TVdZU0FtVnVHZ0pKVGlnQVAB?hl=en-IN&gl=IN&ceid=IN:en',
@@ -231,13 +238,20 @@ app.get('/api/news/:category', async (req, res) => {
                 });
                 
                 const enhancedArticles = await aiProcessor.processNewsArticles(articles);
-                console.log(`✅ FREE RSS returned ${enhancedArticles.length} AI-enhanced articles`);
+                console.log('');
+                console.log('✅✅✅ RSS FALLBACK SUCCESS! ✅✅✅');
+                console.log(`📰 Loaded ${enhancedArticles.length} articles from Google News RSS`);
+                console.log(`🤖 AI Processing: ACTIVE (${enhancedArticles.length} articles enhanced)`);
+                console.log(`🆓 Source: FREE RSS feeds (No limits, works forever!)`);
+                console.log('');
                 
                 return res.json({ 
                     success: true, 
                     articles: enhancedArticles,
                     aiProcessed: true,
-                    source: 'RSS',
+                    source: 'RSS (Auto Fallback)',
+                    fallbackMode: true,
+                    message: '✅ Using RSS feeds - Always available!',
                     trendingTopics: aiProcessor.getTrendingTopics()
                 });
             }
