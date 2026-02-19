@@ -1,6 +1,6 @@
 # 🚀 Drive News India
 
-> India's Most Trusted AI-Powered News Platform | Est. 2024
+> India's Most Trusted AI-Powered News Platform | Est. 2026
 
 [![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](http://localhost:3000)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
@@ -329,3 +329,4 @@ For support, email your.email@example.com or create an issue on GitHub.
 Made with ❤️ in India 🇮🇳
 
 </div>
+
