@@ -2252,11 +2252,16 @@ class IndiaTribuneApp {
     // ═══ TICKER ═══
     async loadTicker() {
         const items = [
-            'Sensex plunged 869.96 points, Nifty declined 251.6 points to 25,567.75; Infosys and Tata Consultancy Services were the only gainers',
-            'Current Delhi Air Quality Index (AQI) is 179 Unhealthy level with real-time air pollution PM2.5 (99µg/m³), PM10 (119µg/m³), Temperature (24.1°C) in',
-            'PM inaugurates India AI Impact Summit 2026',
-            'Mukesh Ambani says Jio with Reliance will invest ₹10 lakh crore over seven years; Sam Altman hails India as global AI leader, predicts 'new and better' jobs',
-           
+            'Sensex crosses 85,000 — new all-time high; Nifty at 26,000',
+            'PM Modi inaugurates ₹2 lakh crore infrastructure projects across 15 states',
+            'Delhi air quality improves to "satisfactory" level for first time in November',
+            'ISRO successfully launches 36 satellites in single mission from Sriharikota',
+            'India wins Test series against Australia 3-1 — Border-Gavaskar Trophy retained',
+            'UPI transactions cross 20 billion monthly — digital payment revolution continues',
+            'Supreme Court landmark verdict strengthens Right to Privacy for digital citizens',
+            'Indian startup ecosystem adds 15 new unicorns in 2025 — total reaches 125',
+            'Vande Bharat Express network expands to 100 cities — Delhi-Mumbai in 5 hours',
+            'Jal Jeevan Mission complete — every rural household now has tap water connection'
         ];
         const el = document.getElementById('tickerContent');
         el.innerHTML = [...items, ...items].map(i => `<span class="ticker-item">${i}</span>`).join('');
@@ -2729,11 +2734,16 @@ class IndiaTribuneApp {
         const translations = {
             ticker: {
                 en: [
-                    'Sensex plunged 869.96 points, Nifty declined 251.6 points to 25,567.75; Infosys and Tata Consultancy Services were the only gainers',
-                    'Current Delhi Air Quality Index (AQI) is 179 Unhealthy level with real-time air pollution PM2.5 (99µg/m³), PM10 (119µg/m³), Temperature (24.1°C) in',
-                    'PM’s address at India AI Impact Summit 2026',
-                    'Mukesh Ambani says Jio with Reliance will invest ₹10 lakh crore over seven years; Sam Altman hails India as global AI leader, predicts 'new and better' jobs',
-              
+                    'Sensex crosses 85,000 — new all-time high; Nifty at 26,000',
+                    'PM Modi inaugurates ₹2 lakh crore infrastructure projects across 15 states',
+                    'Delhi air quality improves to "satisfactory" level for first time in November',
+                    'ISRO successfully launches 36 satellites in single mission from Sriharikota',
+                    'India wins Test series against Australia 3-1 — Border-Gavaskar Trophy retained',
+                    'UPI transactions cross 20 billion monthly — digital payment revolution continues',
+                    'Supreme Court landmark verdict strengthens Right to Privacy for digital citizens',
+                    'Indian startup ecosystem adds 15 new unicorns in 2025 — total reaches 125',
+                    'Vande Bharat Express network expands to 100 cities — Delhi-Mumbai in 5 hours',
+                    'Jal Jeevan Mission complete — every rural household now has tap water connection'
                 ],
                 hi: [
                     'सेंसेक्स 85,000 के पार — नया रिकॉर्ड; निफ्टी 26,000 पर',
