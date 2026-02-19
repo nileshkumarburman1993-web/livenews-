@@ -1755,9 +1755,12 @@
             <ul class="nav-links" id="navLinks">
                 <li><a href="#frontpage" class="active" data-section="frontpage">Front Page</a></li>
                 <li><a href="#nation" data-section="nation">Nation</a></li>
+                <li><a href="#politics" data-section="politics">Politics</a></li>
                 <li><a href="#delhi" data-section="delhi">Delhi/NCR</a></li>
                 <li><a href="#world" data-section="world">World</a></li>
                 <li><a href="#business" data-section="business">Business</a></li>
+                <li><a href="#technology" data-section="technology">Technology</a></li>
+                <li><a href="#science" data-section="science">Science</a></li>
                 <li><a href="#editorial" data-section="editorial">Editorial</a></li>
                 <li><a href="#sports" data-section="sports">Sports</a></li>
                 <li><a href="#entertainment" data-section="entertainment">Entertainment</a></li>
@@ -1798,6 +1801,15 @@
                 <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
             </div>
             <div class="news-grid" id="nationNews"></div>
+        </section>
+
+        <!-- POLITICS -->
+        <section id="politics">
+            <div class="section-header">
+                <h2><i class="fas fa-landmark"></i> Politics — राजनीति</h2>
+                <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="news-grid" id="politicsNews"></div>
         </section>
 
         <!-- DELHI/NCR -->
@@ -1856,6 +1868,24 @@
             <div class="editorial-section">
                 <div class="editorial-grid" id="editorialContent"></div>
             </div>
+        </section>
+
+        <!-- TECHNOLOGY -->
+        <section id="technology">
+            <div class="section-header">
+                <h2><i class="fas fa-microchip"></i> Technology — प्रौद्योगिकी</h2>
+                <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="news-grid" id="technologyNews"></div>
+        </section>
+
+        <!-- SCIENCE -->
+        <section id="science">
+            <div class="section-header">
+                <h2><i class="fas fa-flask"></i> Science — विज्ञान</h2>
+                <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="news-grid" id="scienceNews"></div>
         </section>
 
         <!-- SPORTS -->
@@ -2077,7 +2107,12 @@ class AINewsEngine {
     async fetchFromAPI(category) {
         try {
             updateAIStatus('fetching', `Fetching ${category}...`);
-            const catMap = { nation: 'general', delhi: 'general', business: 'business', sports: 'sports', entertainment: 'entertainment', world: 'general', editorial: 'general', travel: 'general', homeculture: 'general', frontpage: 'general', realestate: 'general' };
+            const catMap = { 
+                nation: 'general', delhi: 'general', business: 'business', sports: 'sports', 
+                entertainment: 'entertainment', world: 'general', editorial: 'general', 
+                travel: 'general', homeculture: 'general', frontpage: 'general', realestate: 'general',
+                politics: 'general', technology: 'technology', science: 'science'
+            };
             const apiCat = catMap[category] || 'general';
             
             // Use backend proxy to avoid CORS
@@ -2279,11 +2314,12 @@ class IndiaTribuneApp {
         updateAIStatus('fetching', 'Loading all sections...');
         try {
             await Promise.all([
-                this.loadFrontPage(), this.loadTicker(), this.loadNation(), this.loadDelhi(),
-                this.loadWorld(), this.loadBusiness(), this.loadEditorial(), this.loadSports(),
-                this.loadEntertainment(), this.loadRealEstate(), this.loadClassifieds(),
-                this.loadTravel(), this.loadObituaries(), this.loadHomeCulture(),
-                this.loadWeather(), this.loadStocks(), this.loadTrending(), this.loadHoroscope()
+                this.loadFrontPage(), this.loadTicker(), this.loadNation(), this.loadPolitics(),
+                this.loadDelhi(), this.loadWorld(), this.loadBusiness(), this.loadTechnology(),
+                this.loadScience(), this.loadEditorial(), this.loadSports(), this.loadEntertainment(),
+                this.loadRealEstate(), this.loadClassifieds(), this.loadTravel(), this.loadObituaries(),
+                this.loadHomeCulture(), this.loadWeather(), this.loadStocks(), this.loadTrending(),
+                this.loadHoroscope()
             ]);
             updateAIStatus('active', 'AI Engine Active');
         } catch (e) {
@@ -2376,13 +2412,34 @@ class IndiaTribuneApp {
     // ═══ SECTION LOADERS ═══
     async loadNation() {
         console.log('🔴 Loading LIVE nation news from API...');
-        
-        // Fetch LIVE general news for nation section
         const a = await this.engine.fetchFromAPI('general');
         this.allArticles.push(...a);
-        
         console.log(`✅ Rendering ${a.length} LIVE nation articles`);
         document.getElementById('nationNews').innerHTML = a.map(x => this.card(x)).join('');
+    }
+
+    async loadPolitics() {
+        console.log('🔴 Loading LIVE politics news from API...');
+        const a = await this.engine.fetchFromAPI('general');
+        this.allArticles.push(...a);
+        console.log(`✅ Rendering ${a.length} LIVE politics articles`);
+        document.getElementById('politicsNews').innerHTML = a.map(x => this.card(x)).join('');
+    }
+
+    async loadTechnology() {
+        console.log('🔴 Loading LIVE technology news from API...');
+        const a = await this.engine.fetchFromAPI('technology');
+        this.allArticles.push(...a);
+        console.log(`✅ Rendering ${a.length} LIVE technology articles`);
+        document.getElementById('technologyNews').innerHTML = a.map(x => this.card(x)).join('');
+    }
+
+    async loadScience() {
+        console.log('🔴 Loading LIVE science news from API...');
+        const a = await this.engine.fetchFromAPI('science');
+        this.allArticles.push(...a);
+        console.log(`✅ Rendering ${a.length} LIVE science articles`);
+        document.getElementById('scienceNews').innerHTML = a.map(x => this.card(x)).join('');
     }
 
     async loadDelhi() {
